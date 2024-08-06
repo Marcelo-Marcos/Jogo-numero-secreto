@@ -2,32 +2,49 @@ let listaDeNumerosSorteados = [];
 let numeroLimite = 10;
 let numeroSecreto = gerarNumeroAleatorio();
 let tentativas = 1;
-//linha com erro
-//linha com erro
+
 function exibirTextoNaTela(tag, texto) {
     let campo = document.querySelector(tag);
     campo.innerHTML = texto;
     responsiveVoice.speak(texto, 'Brazilian Portuguese Female', {rate:1.2});
 }
 
+function mostrarUmtextoDeAlerta(id, texto) {
+    let textoAlerta = document.getElementById(id);
+    textoAlerta.innerHTML = texto;
+    responsiveVoice.speak(texto, 'Brazilian Portuguese Female', {rate:1.2});
+}
+
 function exibirMensagemInicial() {
     exibirTextoNaTela('h1', 'Jogo do número secreto');
-    exibirTextoNaTela('p', 'Escolha um número entre 1 e 10');
+    exibirTextoNaTela('p', `Escolha um número entre 1 e ${numeroLimite}`);
 }
 
 exibirMensagemInicial();
 
+function limparTexto() {
+    mostrarUmtextoDeAlerta(`alerta`, ``);
+}
+
 function verificarChute() {
-    //linha com erro
     let chute = document.querySelector('input').value;
     
     if (chute == numeroSecreto) {
         exibirTextoNaTela('h1', 'Acertou!');
+       
         let palavraTentativa = tentativas > 1 ? 'tentativas' : 'tentativa';
         let mensagemTentativas = `Você descobriu o número secreto com ${tentativas} ${palavraTentativa}!`;
+
         exibirTextoNaTela('p', mensagemTentativas);
         document.getElementById('reiniciar').removeAttribute('disabled');
-    } else {
+        document.getElementById('jogar').setAttribute('disabled', true);
+    }
+    else if (chute == ``) {
+        let mensagemDeAlerta = `Por favor digite um número entre 1 e ${numeroLimite}!`;
+
+        exibirTextoNaTela('p', ``);
+        mostrarUmtextoDeAlerta(`alerta`, mensagemDeAlerta);
+    }else {
         if (chute > numeroSecreto) {
             exibirTextoNaTela('p', 'O número secreto é menor');
         } else {
@@ -35,6 +52,7 @@ function verificarChute() {
         }
         tentativas++;
         limparCampo();
+        limparTexto();
     }
 }
 
@@ -49,7 +67,7 @@ function gerarNumeroAleatorio() {
         return gerarNumeroAleatorio();
     } else {
         listaDeNumerosSorteados.push(numeroEscolhido);
-        console.log(listaDeNumerosSorteados)
+
         return numeroEscolhido;
     }
 }
@@ -60,10 +78,10 @@ function limparCampo() {
 }
 
 function reiniciarJogo() {
-    //linha com erro
     numeroSecreto = gerarNumeroAleatorio();
     limparCampo();
     tentativas = 1;
     exibirMensagemInicial();
-    document.getElementById('reiniciar').setAttribute('disabled', true)
+    document.getElementById('jogar').removeAttribute('disabled');
+    document.getElementById('reiniciar').setAttribute('disabled', true);
 }

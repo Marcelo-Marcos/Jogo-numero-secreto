@@ -106,12 +106,6 @@ button {
     font-weight: 400;
 }
 
-.texto__paragrafo_Alerta {
-    font-size: 32px;
-    font-weight: 400;
-    color: #f08282;
-}
-
 button:disabled {
     background-color: gray;
 }

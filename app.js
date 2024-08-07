@@ -7,12 +7,11 @@ function exibirTextoNaTela(tag, texto) {
     let campo = document.querySelector(tag);
     campo.innerHTML = texto;
     responsiveVoice.speak(texto, 'Brazilian Portuguese Female', {rate:1.2});
-}
+}    
 
-function mostrarUmtextoDeAlerta(id, texto) {
-    let textoAlerta = document.getElementById(id);
-    textoAlerta.innerHTML = texto;
-    responsiveVoice.speak(texto, 'Brazilian Portuguese Female', {rate:1.2});
+function modificarCorDoTexto(id, cor) {
+    let corDoTexto = document.getElementById(id);
+    corDoTexto.style.color = cor;
 }
 
 function exibirMensagemInicial() {
@@ -22,14 +21,12 @@ function exibirMensagemInicial() {
 
 exibirMensagemInicial();
 
-function limparTexto() {
-    mostrarUmtextoDeAlerta(`alerta`, ``);
-}
-
 function verificarChute() {
     let chute = document.querySelector('input').value;
     
     if (chute == numeroSecreto) {
+        modificarCorDoTexto('cor-titulo', '#9CDBA6');
+        modificarCorDoTexto('alerta', '#9CDBA6');
         exibirTextoNaTela('h1', 'Acertou!');
        
         let palavraTentativa = tentativas > 1 ? 'tentativas' : 'tentativa';
@@ -39,11 +36,14 @@ function verificarChute() {
         document.getElementById('reiniciar').removeAttribute('disabled');
         document.getElementById('jogar').setAttribute('disabled', true);
     }
-    else if (chute == ``) {
+    else if (chute == `` || chute == 0) {
+        let mensagemDeAlertaTitulo = `Atenção!`;
         let mensagemDeAlerta = `Por favor digite um número entre 1 e ${numeroLimite}!`;
-
-        exibirTextoNaTela('p', ``);
-        mostrarUmtextoDeAlerta(`alerta`, mensagemDeAlerta);
+        
+        exibirTextoNaTela(`h1`, mensagemDeAlertaTitulo);
+        exibirTextoNaTela(`p`, mensagemDeAlerta);
+        modificarCorDoTexto('cor-titulo', '#f08282');
+        modificarCorDoTexto('alerta', '#f08282');
     }else {
         if (chute > numeroSecreto) {
             exibirTextoNaTela('p', 'O número secreto é menor');
@@ -52,7 +52,12 @@ function verificarChute() {
         }
         tentativas++;
         limparCampo();
-        limparTexto();
+        modificarCorDoTexto('alerta', '#ffffff');
+        modificarCorDoTexto('cor-titulo', '#ffffff');
+
+        let verAtencao = document.querySelector('h1').value;
+        let verSeAtencao = verAtencao == `Atenção!` ? 'Jogo do número secreto' : 'Jogo do número secreto';
+        exibirTextoNaTela('h1', verSeAtencao);
     }
 }
 
@@ -82,6 +87,8 @@ function reiniciarJogo() {
     limparCampo();
     tentativas = 1;
     exibirMensagemInicial();
+    modificarCorDoTexto('alerta', '#ffffff');
+    modificarCorDoTexto('cor-titulo', '#ffffff');
     document.getElementById('jogar').removeAttribute('disabled');
     document.getElementById('reiniciar').setAttribute('disabled', true);
 }

@@ -36,7 +36,7 @@ function verificarChute() {
         document.getElementById('reiniciar').removeAttribute('disabled');
         document.getElementById('jogar').setAttribute('disabled', true);
     }
-    else if (chute == `` || chute == 0) {
+    else if (chute == `` || chute == 0 || chute > 10) {
         let mensagemDeAlertaTitulo = `Atenção!`;
         let mensagemDeAlerta = `Por favor digite um número entre 1 e ${numeroLimite}!`;
         
@@ -44,6 +44,8 @@ function verificarChute() {
         exibirTextoNaTela(`p`, mensagemDeAlerta);
         modificarCorDoTexto('cor-titulo', '#f08282');
         modificarCorDoTexto('alerta', '#f08282');
+
+        limparCampo();
     }else {
         if (chute > numeroSecreto) {
             exibirTextoNaTela('p', 'O número secreto é menor');
